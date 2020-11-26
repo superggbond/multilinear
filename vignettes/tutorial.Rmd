@@ -1,0 +1,120 @@
+---
+title: "A Quick Tutorial of Multilinear"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Here, we are using the R built-in dataset `longley` to illustrate how to use the package `multilinear` to conduct multiple linear regression.
+
+```{r, echo = TRUE}
+# load the package and the dataset
+library(multilinear)
+data(longley)
+head(longley)
+```
+
+The main function in `multilinear` is `mlr`, which outputs a list of analytical results using multiple linear regression model. The outputs include a summary table of coefficients, model-fitted response values, residuals of response based on the model, variance-covariance matrix and ANOVA results. Below shows how it works when we model the regression of number of people employed on GNP implicit price deflator, Gross National Product, number of unemployed, number of people in the armed forces and ‘noninstitutionalized’ population (age ≥ 14 years old).
+
+```{r, echo = TRUE}
+# run the main function mlr with default setting of decimals to be 3. 
+# to keep n decimals in the results, you can use the argument "decimal = n" in the function
+fit.mlr <- mlr("Employed", c("GNP.deflator","GNP","Unemployed","Armed.Forces","Population"), 
+               longley)
+```
+
+In order to show the correctness of our function, below is the comparison of results between our function `mlr` and the R standard function `lm` for linear regression.
+
+```{r, echo = TRUE}
+# run the standard lm function
+fit.lm <- lm(Employed ~ GNP.deflator + GNP + Unemployed + Armed.Forces + Population, 
+             data = longley)
+```
+
+The estimate of coefficients using `mlr`:
+```{r, echo = TRUE}
+fit.mlr$summary
+```
+
+The estimate of coefficients using `lm`:
+```{r, echo = TRUE}
+summary(fit.lm)
+```
+
+The model-fitted response values using `mlr`:
+```{r, echo = TRUE}
+fit.mlr$y.fitted
+```
+
+The model-fitted response values using `lm`:
+```{r, echo = TRUE}
+fitted(fit.lm)
+```
+
+The residuals of response based on the model using `mlr`:
+```{r, echo = TRUE}
+fit.mlr$y.res
+```
+
+The residuals of response based on the model using `lm`:
+```{r, echo = TRUE}
+residuals(fit.lm)
+```
+
+The variance-covariance matrix using `mlr`:
+```{r, echo = TRUE}
+fit.mlr$vcov.matrix
+```
+
+The variance-covariance matrix using `lm`:
+```{r, echo = TRUE}
+vcov(fit.lm)
+```
+
+The ANOVA results using `mlr`:
+```{r, echo = TRUE}
+fit.mlr$ANOVA.table
+```
+
+The ANOVA results using `lm`:
+```{r, echo = TRUE}
+anova(fit.lm)
+```
+
+Using another function `coefs` in our package, we can also provide a brief comparible estimates of all coefficients.     
+The estumates of coefficients using `coefs`:
+```{r, echo = TRUE}
+coefs(fit.mlr)
+```
+
+The estumates of coefficients using `lm`:
+```{r, echo = TRUE}
+coefficients(fit.lm)
+```
+
+In `multilinear`, we also include a function `select.cov`, which selects covariates passing a given threshold of significance.
+```{r, echo = TRUE}
+select.cov(fit.mlr, 0.05)
+```
+
+Also, `multilinear` shares similar efficiency to `lm` on small dataset like `longley`.
+```{r, echo = TRUE}
+system.time({ mlr("Employed", c("GNP.deflator","GNP","Unemployed","Armed.Forces","Population"), 
+               longley) })
+system.time({ lm(Employed ~ GNP.deflator + GNP + Unemployed + Armed.Forces + Population, 
+             data = longley) })
+```
+
+
+
+
+

@@ -3,13 +3,20 @@
 #'Conduct basic analyses with multiple linear regression
 #'
 #'@param res the name of the response variable in the model
-#'@param covs the names of covariates you'd like to involve in the model
+#'@param covs a vector of covariate name(s) you'd like to involve in the model
 #'@param df the name of your dataset
 #'@param decimal number of decimals to keep, the default is 3
 #'
-#'@return a list of analytical results
+#'@return A list of analytical results
+#'@return summary: a table of estimated coefficients
+#'@return y.fitted: model-fitted response values
+#'@return y.res: residuals of response based on the model
+#'@return vcov.matrix: variance-covariance matrix
+#'@return ANOVA.table: ANOVA results
+#'@return A warning message will be given instead of the analytical results, if collinearity is found in the input dataset.
 #'
 #'@examples
+#'data(longley)
 #'mlr("Employed", c("GNP.deflator","GNP","Unemployed","Armed.Forces","Population"), longley, 5)
 #'
 #'@export
@@ -19,6 +26,7 @@ mlr = function(res, covs, df, decimal=3) {
   part1 = paste(res,"~ intercept +")
   part2 = paste(covs, collapse = " + ")
   cat(paste(part1,part2))
+  cat("\n")
   y = df[,res]
   cov.info = as.matrix(df[,covs])
   X = cov.info
@@ -89,11 +97,12 @@ mlr = function(res, covs, df, decimal=3) {
     anova["Residuals",3] = round(sigma.sq.est, decimal)
   }
 
-  if(error == 1) {cat("Colinearity existed!")} else {
+  if(error == 1) {cat("Collinearity existed!")} else {
     return(list(summary = res.sum, y.fitted = t(y.fitted), y.res=t(y.res), vcov.matrix = vcov.mat, ANOVA.table = anova))
   }
 }
 
+# an internal function to calculate SSR
 get.ssr = function(X,y) {
   y.bar = mean(y)
   beta.est = solve(t(X)%*%X)%*%t(X)%*%y

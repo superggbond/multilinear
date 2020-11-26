@@ -9,19 +9,32 @@ mlr(res, covs, df, decimal = 3)
 \arguments{
 \item{res}{the name of the response variable in the model}
 
-\item{covs}{the names of covariates you'd like to involve in the model}
+\item{covs}{a vector of covariate name(s) you'd like to involve in the model}
 
 \item{df}{the name of your dataset}
 
 \item{decimal}{number of decimals to keep, the default is 3}
 }
 \value{
-a list of analytical results
+A list of analytical results
+
+summary: a table of estimated coefficients
+
+y.fitted: model-fitted response values
+
+y.res: residuals of response based on the model
+
+vcov.matrix: variance-covariance matrix
+
+ANOVA.table: ANOVA results
+
+A warning message will be given instead of the analytical results, if collinearity is found in the input dataset.
 }
 \description{
 Conduct basic analyses with multiple linear regression
 }
 \examples{
+data(longley)
 mlr("Employed", c("GNP.deflator","GNP","Unemployed","Armed.Forces","Population"), longley, 5)
 
 }
