@@ -90,13 +90,13 @@ The ANOVA results using `lm`:
 anova(fit.lm)
 ```
 
-Using another function `coefs` in our package, we can also provide a brief comparible estimates of all coefficients.     
-The estumates of coefficients using `coefs`:
+Using another function `coefs` in our package, we can also provide a brief comparable estimates of all coefficients.     
+The estimates of coefficients using `coefs`:
 ```{r, echo = TRUE}
 coefs(fit.mlr)
 ```
 
-The estumates of coefficients using `lm`:
+The estimates of coefficients using `lm`:
 ```{r, echo = TRUE}
 coefficients(fit.lm)
 ```
