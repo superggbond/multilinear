@@ -9,6 +9,7 @@ This R package is a practice for the coursework Biostat 625 at University of Mic
 ```
 # install.packages("devtools")
 devtools::install_github("superggbond/multilinear", build_vignettes = T)
+
 # access the tutorial
 browseVignettes("multilinear") 
 ```
