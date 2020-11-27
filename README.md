@@ -87,3 +87,5 @@ coefs(fit.mlr)
 select.cov(fit.mlr, 0.05)
 #> [1] "Intercept" "GNP"
 ```
+## Feedbacks
+If you encounter a clear bug or have any questions or suggestions, please contact: hhzhang@umich.edu.
